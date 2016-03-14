@@ -18,3 +18,14 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
           [applications: [:elixir_logflow]]
         end
 
+## Usage
+
+```elixir
+defmodule User do
+  use ElixirLogflow
+
+  def say_hello do
+    IO.puts "halloa!"
+  end
+end
+```
