@@ -20,9 +20,47 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
 ## Usage
 
+Normal usage.
+
 ```elixir
 defmodule User do
   use ElixirLogflow
+
+  def say_hello do
+    IO.puts "halloa!"
+  end
+end
+```
+
+Will result in
+
+```elixir
+defmodule User do
+  # ...
+
+  def say_hello do
+    do_log
+    IO.puts "halloa!"
+  end
+end
+```
+
+Disable log in module.
+
+```elixir
+defmodule User do
+  use ElixirLogflow skip_log: true
+
+  def say_hello do
+    IO.puts "halloa!"
+  end
+end
+```
+
+```elixir
+defmodule User do
+
+  # ...
 
   def say_hello do
     IO.puts "halloa!"
