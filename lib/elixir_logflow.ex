@@ -22,7 +22,8 @@ defmodule ElixirLogflow do
 
   def do_using(args_ast) do
     {args, []} = Code.eval_quoted(args_ast)
-    skip_log_flag = Keyword.get(args, :skip_log, false)
+    skip_log_flag = Keyword.get(args, :skip_log,
+      decide_default_skip_log_per_env)
 
     case skip_log_flag do
       true ->
@@ -30,8 +31,12 @@ defmodule ElixirLogflow do
       false ->
         quote do
           import Kernel, except: [def: 2]
-          import ElixirLogflow, only: [def: 2]
+          import ElixirLogflow, only: [def: 2, do_log: 1]
         end
     end
+  end
+
+  def decide_default_skip_log_per_env(mix_env \\ Mix.env) do
+    if mix_env == :dev, do: false, else: true
   end
 end
