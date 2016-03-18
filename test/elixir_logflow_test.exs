@@ -5,10 +5,20 @@ defmodule ElixirLogflowTest do
   test "do_def" do
     call_ast = quote(unquote: false) do say_hello end
     body_ast = quote(unquote: false) do [do: :ok] end
+    fun_name = ""
     expected_ast = quote context: ElixirLogflow do
       Kernel.def unquote({:say_hello, [], ElixirLogflowTest}) do
-        do_log(unquote({:{}, [], [:say_hello, [], ElixirLogflowTest]}))
-        :ok
+        module = __ENV__.module
+        function_name = unquote(fun_name)
+
+        ElixirLogflow.do_log_pre(module,
+          unquote({:{}, [], [:say_hello, [], ElixirLogflowTest]}))
+        result = :ok
+        ElixirLogflow.do_log_pst(module,
+          unquote({:{}, [], [:say_hello, [], ElixirLogflowTest]}),
+          result)
+
+        result
       end
     end
 
@@ -24,7 +34,7 @@ defmodule ElixirLogflowTest do
   test "do_using without override" do
     expected_ast = quote context: ElixirLogflow do
       import Kernel, except: [def: 2]
-      import ElixirLogflow, only: [def: 2, do_log: 1]
+      import ElixirLogflow, only: [def: 2]
     end
     result_ast = ElixirLogflow.do_using(quote do [skip_log: false] end)
     assert ^expected_ast = result_ast
