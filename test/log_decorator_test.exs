@@ -3,14 +3,15 @@ defmodule LogDecoratorTest do
   doctest LogDecorator
 
   test "decorate - with simple params" do
-    %FnDef{
+    {:ok, %FnDef{
       fn_call_ast: result_fn_call_ast,
       fn_options_ast: result_fn_options_ast
-    } =
-      LogDecorator.decorate %FnDef{
+    }} =
+    LogDecorator.decorate(%FnDef{
         fn_call_ast: quote do beep(word) end,
         fn_options_ast: quote do [do: word] end
       }
+    )
 
     mediator_var_ast = Macro.var(:arg0, FnDef)
     assert result_fn_call_ast == (quote do

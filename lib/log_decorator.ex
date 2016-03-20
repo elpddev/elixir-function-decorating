@@ -21,10 +21,10 @@ defmodule LogDecorator do
       end
     )
 
-    %FnDef{ fn_def |
+    {:ok, %FnDef{ fn_def |
       fn_call_ast: decorated_fn_call_ast,
       fn_options_ast: decorated_fn_options_ast
-    }
+    }}
   end
 
   def log_post(env, fun_name, args_names, result) do

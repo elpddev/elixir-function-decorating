@@ -22,8 +22,27 @@ defmodule ElixirLogflowTest do
     assert result_ast == ElixirLogflow.generate_using_ast
   end
 
-  @tag :skip
-  test "do_def" do
+  test "decorate_function_def" do
+    fn_call_ast = quote do beep(word) end
+    fn_options_ast = [do: quote do word end]
+
+    defmodule TestModuleDecorator do
+      def decorate(%FnDef{} = fn_def, decorators) do
+        {:ok, fn_def}
+      end
+    end
+
+    result = ElixirLogflow.decorate_function_def(%FnDef{
+        fn_call_ast: fn_call_ast, fn_options_ast: fn_options_ast},
+        [TestModuleDecorator])
+
+    assert result == {:ok, %FnDef{
+        fn_call_ast: quote do beep(word) end,
+        fn_options_ast: [do: quote do word end]
+      }}
+  end
+
+  def tttt do
     call_ast = quote(unquote: false) do say_hello end
     body_ast = quote(unquote: false) do [do: :ok] end
     fun_name = ""

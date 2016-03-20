@@ -39,6 +39,7 @@ defmodule ElixirLogflow do
   require FnDef
 
   @default_mix_envs [:dev]
+  @decorators []
 
   """
   Inteface
@@ -54,7 +55,11 @@ defmodule ElixirLogflow do
   the import statement.
   """
   defmacro def(fn_call_ast, fn_options_ast) do
-    decorate_function_def(fn_call_ast, fn_options_ast)
+    do_def(fn_call_ast, fn_options_ast)
+  end
+
+  defmacro decorate_fn_with(decorator) do
+    @decorators = List.insert_at(@decorators, -1, decorator)
   end
 
   """
@@ -75,7 +80,8 @@ defmodule ElixirLogflow do
   def generate_using_ast do
     quote do
       import Kernel, except: [def: 2]
-      import ElixirLogflow, only: [def: 2]
+      import ElixirLogflow, only: [def: 2, decorate_fn_with: 1]
+      @decorators = []
     end
   end
 
@@ -86,27 +92,44 @@ defmodule ElixirLogflow do
       nil -> []
       _ -> args
     end
-    
+
     mix_envs = Keyword.get(args, :mix_envs,
       @default_mix_envs)
 
     {mix_envs}
   end
 
-  @doc """
-  Function decorator implementor.
-  """
-  @todo "receive decorators as list and implement in loop"
-  def decorate_function_def(fn_call_ast, fn_options_ast) do
-    %FnDef{
-      fn_call_ast: result_fn_call_ast,
-      fn_options_ast: result_fn_options_ast
+  def do_def(fn_call_ast, fn_options_ast) do
+    {
+      :ok,
+      %FnDef{
+        fn_call_ast: result_fn_call_ast,
+        fn_options_ast: result_fn_options_ast
+      }
     } =
-    %FnDef{fn_call_ast: fn_call_ast, fn_options_ast: fn_options_ast}
-    |> LogDecorator.decorate
+    decorate_function_def(
+      %FnDef{fn_call_ast: fn_call_ast,
+        fn_options_ast: fn_options_ast,
+      },
+      @decorators)
 
     quote do
       Kernel.def unquote(result_fn_call_ast), unquote(result_fn_options_ast)
     end
+  end
+
+  @doc """
+  Function decorator implementor.
+  """
+  @todo "receive decorators as list and implement in loop"
+
+  def decorate_function_def(%FnDef{} = fn_def, []) do
+    {:ok, fn_def}
+  end
+
+  def decorate_function_def(%FnDef{} = fn_def, [decorator | rest_decorators]) do
+    {:ok, _result_fn_def} =
+    fn_def
+    |> decorator.decorate(rest_decorators)
   end
 end
