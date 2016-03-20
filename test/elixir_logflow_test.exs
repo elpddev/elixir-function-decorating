@@ -2,6 +2,27 @@ defmodule ElixirLogflowTest do
   use ExUnit.Case
   doctest ElixirLogflow
 
+  test "calc args - mix_envs - default" do
+    assert ElixirLogflow.calc_args(quote do nil end) == {[:dev]}
+  end
+
+  test "do_using - simple - mix env = dev" do
+    result_ast = ElixirLogflow.do_using(nil, :dev)
+    assert result_ast == ElixirLogflow.generate_using_ast
+  end
+
+  test "do_using - simple - mix env = prod" do
+    result_ast = ElixirLogflow.do_using(nil, current_env: :prod)
+    assert result_ast == (quote do nil end)
+  end
+
+  test "do_using - with 'mix_envs: [:prod]', mix env = :prod" do
+    result_ast = ElixirLogflow.do_using(quote do [mix_envs: [:prod]] end,
+      :prod)
+    assert result_ast == ElixirLogflow.generate_using_ast
+  end
+
+  @tag :skip
   test "do_def" do
     call_ast = quote(unquote: false) do say_hello end
     body_ast = quote(unquote: false) do [do: :ok] end
@@ -24,26 +45,5 @@ defmodule ElixirLogflowTest do
 
     result_ast = ElixirLogflow.do_def(call_ast, body_ast)
     assert ^expected_ast = result_ast
-  end
-
-  test "do_using with override" do
-    result_ast = ElixirLogflow.do_using(quote do [skip_log: true] end)
-    assert nil == result_ast
-  end
-
-  test "do_using without override" do
-    expected_ast = quote context: ElixirLogflow do
-      import Kernel, except: [def: 2]
-      import ElixirLogflow, only: [def: 2]
-    end
-    result_ast = ElixirLogflow.do_using(quote do [skip_log: false] end)
-    assert ^expected_ast = result_ast
-  end
-
-
-  test "decide_default_skip_log_per_env" do
-    assert ElixirLogflow.decide_default_skip_log_per_env(:dev) == false
-    assert ElixirLogflow.decide_default_skip_log_per_env(:test) == true
-    assert ElixirLogflow.decide_default_skip_log_per_env(:prod) == true
   end
 end
