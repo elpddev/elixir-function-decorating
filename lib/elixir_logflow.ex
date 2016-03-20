@@ -39,28 +39,6 @@ defmodule ElixirLogflow do
   require FnDef
 
   @default_mix_envs [:dev]
-  @decorators []
-
-  """
-  Inteface
-  """
-
-  defmacro __using__(args_ast) do
-    do_using(args_ast)
-  end
-
-  @doc """
-  The decorator mechanism.
-  Override the original Kernel.def by not inlucing it in
-  the import statement.
-  """
-  defmacro def(fn_call_ast, fn_options_ast) do
-    do_def(fn_call_ast, fn_options_ast)
-  end
-
-  defmacro decorate_fn_with(decorator) do
-    @decorators = List.insert_at(@decorators, -1, decorator)
-  end
 
   """
   Utility functions
@@ -81,7 +59,8 @@ defmodule ElixirLogflow do
     quote do
       import Kernel, except: [def: 2]
       import ElixirLogflow, only: [def: 2, decorate_fn_with: 1]
-      @decorators = []
+      IO.puts "generate_use_ast. module: #{inspect(__MODULE__)}"
+      Module.register_attribute(__MODULE__, :decorators, accumulate: true)
     end
   end
 
@@ -100,21 +79,35 @@ defmodule ElixirLogflow do
   end
 
   def do_def(fn_call_ast, fn_options_ast) do
-    {
-      :ok,
-      %FnDef{
-        fn_call_ast: result_fn_call_ast,
-        fn_options_ast: result_fn_options_ast
-      }
-    } =
-    decorate_function_def(
-      %FnDef{fn_call_ast: fn_call_ast,
-        fn_options_ast: fn_options_ast,
-      },
-      @decorators)
+    quote bind_quoted: [
+        orig_fn_call_ast: Macro.escape(fn_call_ast),
+        orig_fn_options_ast: Macro.escape(fn_options_ast)
+      ] do
+      decorators = Module.get_attribute(__MODULE__, :decorators)
+      IO.puts "[x] do_def. decorators: #{inspect(decorators)}"
 
-    quote do
-      Kernel.def unquote(result_fn_call_ast), unquote(result_fn_options_ast)
+      {
+        :ok,
+        %FnDef{
+          fn_call_ast: result_fn_call_ast,
+          fn_options_ast: result_fn_options_ast
+        }
+      } =
+      ElixirLogflow.decorate_function_def(
+        %FnDef{fn_call_ast: orig_fn_call_ast,
+          fn_options_ast: orig_fn_options_ast,
+        },
+        decorators)
+
+      IO.puts """
+      - fn_call_ast: #{inspect(result_fn_call_ast)}
+      - fn_opts_ast: #{inspect(result_fn_options_ast)}
+      """
+      exp = quote do
+        Kernel.def(unquote(result_fn_call_ast), unquote(result_fn_options_ast))
+      end
+      Code.eval_quoted(exp, [result_fn_call_ast: result_fn_call_ast,
+        result_fn_options_ast: result_fn_options_ast], __ENV__)
     end
   end
 
@@ -124,12 +117,49 @@ defmodule ElixirLogflow do
   @todo "receive decorators as list and implement in loop"
 
   def decorate_function_def(%FnDef{} = fn_def, []) do
+    IO.puts """
+    [x] decorate_function_def
+    - nil
+    """
     {:ok, fn_def}
   end
 
   def decorate_function_def(%FnDef{} = fn_def, [decorator | rest_decorators]) do
-    {:ok, _result_fn_def} =
+    IO.puts """
+    [x] decorate_function_def
+    - fn_def: #{inspect(fn_def)}
+    - decorator: #{inspect(decorator)}
+    - rest_decorators: #{inspect(rest_decorators)}
+    """
+    {:ok, result_fn_def} =
     fn_def
-    |> decorator.decorate(rest_decorators)
+    |> decorator.decorate
+
+    decorate_function_def(result_fn_def, rest_decorators)
+  end
+
+  """
+  Inteface
+  """
+
+  defmacro __using__(args_ast) do
+    do_using(args_ast)
+  end
+
+  defmacro decorate_fn_with(decorator_ast) do
+    result = quote do
+      @decorators unquote(decorator_ast)
+    end
+    IO.puts "decorate_fn_with: #{inspect(result)}"
+    result
+  end
+
+  @doc """
+  The decorator mechanism.
+  Override the original Kernel.def by not inlucing it in
+  the import statement.
+  """
+  defmacro def(fn_call_ast, fn_options_ast) do
+    ElixirLogflow.do_def(fn_call_ast, fn_options_ast)
   end
 end
