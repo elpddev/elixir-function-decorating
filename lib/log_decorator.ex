@@ -1,5 +1,6 @@
 defmodule LogDecorator do
   require FnDef
+  # todo: add use FunctionDecorator behaviour
 
   def decorate(
     %FnDef{fn_call_ast: fn_call_ast, fn_options_ast: fn_options_ast} = fn_def) do
@@ -12,9 +13,8 @@ defmodule LogDecorator do
     decorated_fn_options_ast = Keyword.update(fn_options_ast, :do, nil,
       fn do_opt ->
         quote do
-          module = __ENV__.module
           result = unquote(do_opt)
-          do_log_post(module, unquote(fn_name_ast),
+          LogDecorator.log_post(__ENV__, unquote(fn_name_ast),
             unquote(arg_names), result)
           result
         end
@@ -27,10 +27,14 @@ defmodule LogDecorator do
     }
   end
 
-  def do_log_post(module, fun_name, args_names, result) do
-    IO.puts "#{inspect(self)} [x] #{module}.#{fun_name}" <>
+  def log_post(env, fun_name, args_names, result) do
+    IO.puts generate_log_post_line(env, fun_name, args_names, result)
+  end
+
+  def generate_log_post_line(%{module: module} = _, fun_name, args_names, result) do
+    "#{inspect(self)} [x] #{module}.#{fun_name}" <>
       "(#{inspect(args_names)})" <>
-      " : #{inspect(result)}"
+      " -> #{inspect(result)}"
   end
 
   def replace_args_with_decorated_args(head, fun_name, args_ast, decorated_args) do
