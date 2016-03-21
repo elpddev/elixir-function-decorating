@@ -1,39 +1,41 @@
 defmodule FunctionDecorating do
   @moduledoc """
+  Add a function decorating availability to a module.
+
+  ## Usage
+
+  Decorating in dev with log decorator.
+
   defmodule User do
     use FunctionDecorating
+    decorate_fn_with(LogDecorator)
 
     def say(word) do
       word
     end
   end
 
-  # todo: no decoration is happening
+  iex>User.say("hello")
+  #PID<0.86.0> [x] Elixir.User.say(["hello"]) -> "hello"
+  "hello"
+
+  Default usage is for Mix.env == :dev only. To override it:
 
   defmodule User do
-    use FunctionDecorating
-    decorate_fn_with: LogDecorator
+    use FunctionDecorating mix_envs: [:prod]
+    decorate_fn_with(LogDecorator)
 
     def say(word) do
       word
     end
   end
 
-  # todo: decoration result ast
+  iex>Mix.env
+  :prod
 
-  # todo: result of decoration with mix.env == :prod
-
-  defmodule User do
-    use FunctionDecorating, mix_envs: [:prod]
-    decorate_fn_with: LogDecorator
-
-    def say(word) do
-      wor
-    end
-  end
-
-  # todo: result of decoration with mix.env == :prod
-
+  iex>User.say("hello")
+  #PID<0.86.0> [x] Elixir.User.say(["hello"]) -> "hello"
+  "hello"
   """
 
   @default_mix_envs [:dev]
@@ -102,11 +104,6 @@ defmodule FunctionDecorating do
       Code.eval_quoted(exp, [], __ENV__)
     end
   end
-
-  @doc """
-  Function decorator implementor.
-  """
-  @todo "receive decorators as list and implement in loop"
 
   def decorate_function_def(%FnDef{} = fn_def, []) do
     {:ok, fn_def}
