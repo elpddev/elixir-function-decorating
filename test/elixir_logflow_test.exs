@@ -27,8 +27,12 @@ defmodule ElixirLogflowTest do
     fn_options_ast = [do: quote do word end]
 
     defmodule TestModuleDecorator do
-      def decorate(%FnDef{fn_call_ast: in_fn_call_ast,
-        fn_options_ast: [do: in_do_block] = in_fn_options_ast} = fn_def, decorators) do
+      def decorate(
+        %FnDef{
+          fn_call_ast: in_fn_call_ast,
+          fn_options_ast: [do: in_do_block] = in_fn_options_ast
+          } = fn_def) do
+
         {:ok, %FnDef{
           fn_call_ast: in_fn_call_ast,
           fn_options_ast: [do: quote do

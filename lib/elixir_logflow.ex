@@ -59,7 +59,6 @@ defmodule ElixirLogflow do
     quote do
       import Kernel, except: [def: 2]
       import ElixirLogflow, only: [def: 2, decorate_fn_with: 1]
-      IO.puts "generate_use_ast. module: #{inspect(__MODULE__)}"
       Module.register_attribute(__MODULE__, :decorators, accumulate: true)
     end
   end
@@ -84,7 +83,6 @@ defmodule ElixirLogflow do
         orig_fn_options_ast: Macro.escape(fn_options_ast)
       ] do
       decorators = Module.get_attribute(__MODULE__, :decorators)
-      IO.puts "[x] do_def. decorators: #{inspect(decorators)}"
 
       {
         :ok,
@@ -99,10 +97,6 @@ defmodule ElixirLogflow do
         },
         decorators)
 
-      IO.puts """
-      - fn_call_ast: #{inspect(result_fn_call_ast)}
-      - fn_opts_ast: #{inspect(result_fn_options_ast)}
-      """
       exp = quote do
         Kernel.def(unquote(result_fn_call_ast), unquote(result_fn_options_ast))
       end
@@ -117,20 +111,10 @@ defmodule ElixirLogflow do
   @todo "receive decorators as list and implement in loop"
 
   def decorate_function_def(%FnDef{} = fn_def, []) do
-    IO.puts """
-    [x] decorate_function_def
-    - nil
-    """
     {:ok, fn_def}
   end
 
   def decorate_function_def(%FnDef{} = fn_def, [decorator | rest_decorators]) do
-    IO.puts """
-    [x] decorate_function_def
-    - fn_def: #{inspect(fn_def)}
-    - decorator: #{inspect(decorator)}
-    - rest_decorators: #{inspect(rest_decorators)}
-    """
     {:ok, result_fn_def} =
     fn_def
     |> decorator.decorate
@@ -147,11 +131,9 @@ defmodule ElixirLogflow do
   end
 
   defmacro decorate_fn_with(decorator_ast) do
-    result = quote do
+    quote do
       @decorators unquote(decorator_ast)
     end
-    IO.puts "decorate_fn_with: #{inspect(result)}"
-    result
   end
 
   @doc """
