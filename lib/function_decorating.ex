@@ -6,6 +6,7 @@ defmodule FunctionDecorating do
 
   Decorating in dev with log decorator.
 
+  ```elixir
   defmodule User do
     use FunctionDecorating
     decorate_fn_with(LogDecorator)
@@ -18,9 +19,11 @@ defmodule FunctionDecorating do
   iex >User.say("hello")
   #PID<0.86.0> [x] Elixir.User.say(["hello"]) -> "hello"
   "hello"
+  ```
 
   Default usage is for Mix.env == :dev only. To override it:
 
+  ```elixir
   defmodule User do
     use FunctionDecorating mix_envs: [:prod]
     decorate_fn_with(LogDecorator)
@@ -36,6 +39,7 @@ defmodule FunctionDecorating do
   iex >User.say("hello")
   #PID<0.86.0> [x] Elixir.User.say(["hello"]) -> "hello"
   "hello"
+  ```
   """
 
   @default_mix_envs [:dev]
