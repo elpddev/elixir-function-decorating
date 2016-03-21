@@ -15,7 +15,7 @@ defmodule FunctionDecorating do
     end
   end
 
-  iex>User.say("hello")
+  iex >User.say("hello")
   #PID<0.86.0> [x] Elixir.User.say(["hello"]) -> "hello"
   "hello"
 
@@ -30,10 +30,10 @@ defmodule FunctionDecorating do
     end
   end
 
-  iex>Mix.env
+  iex >Mix.env
   :prod
 
-  iex>User.say("hello")
+  iex >User.say("hello")
   #PID<0.86.0> [x] Elixir.User.say(["hello"]) -> "hello"
   "hello"
   """
