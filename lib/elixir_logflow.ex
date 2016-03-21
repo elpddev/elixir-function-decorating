@@ -82,6 +82,7 @@ defmodule ElixirLogflow do
         orig_fn_call_ast: Macro.escape(fn_call_ast),
         orig_fn_options_ast: Macro.escape(fn_options_ast)
       ] do
+
       decorators = Module.get_attribute(__MODULE__, :decorators)
 
       {
@@ -100,8 +101,7 @@ defmodule ElixirLogflow do
       exp = quote do
         Kernel.def(unquote(result_fn_call_ast), unquote(result_fn_options_ast))
       end
-      Code.eval_quoted(exp, [result_fn_call_ast: result_fn_call_ast,
-        result_fn_options_ast: result_fn_options_ast], __ENV__)
+      Code.eval_quoted(exp, [], __ENV__)
     end
   end
 
