@@ -28,11 +28,13 @@ defmodule FnDef do
   Returns {[args names], [decorated args ast]}
   ## Examples
 
+  ```elixir
     iex> FnDef.decorate_args(quote context: __MODULE__ do [a, b, _] end)
     {[{:arg0, [], FnDef}, {:arg1, [], FnDef}, {:arg2, [], FnDef}],
       [{:=, [], [{:a, [], __MODULE__}, {:arg0, [], FnDef}]},
         {:=, [], [{:b, [], __MODULE__}, {:arg1, [], FnDef}]},
         {:=, [], [{:_, [], __MODULE__}, {:arg2, [], FnDef}]}]}
+  ```
   """
   @spec decorate_args(list) :: {list, list}
   def decorate_args([]), do: {[],[]}
@@ -48,9 +50,10 @@ defmodule FnDef do
   Returns {decorated argument name, decorated argument ast}
 
   ## Examples
-
+  ```elixir
     iex> FnDef.decorate_arg({quote context: __MODULE__ do first_name end, 0})
     {{:arg0, [], FnDef}, {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], FnDef}]}}
+  ```
   """
   @spec decorate_arg({Macro.t, non_neg_integer}) :: {Macro.t, Macro.t}
   def decorate_arg({arg_ast, index}) do
@@ -63,9 +66,10 @@ defmodule FnDef do
   Generate AST for argument AST and its mediator.
 
   ## Examples
-
+  ```elixir
     iex> FnDef.calc_full_arg(quote context: __MODULE__ do first_name end, quote context: __MODULE__ do arg0 end)
     {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], __MODULE__}]}
+  ```
   """
   @spec calc_full_arg(Macro.t, Macro.t) :: Macro.t
   def calc_full_arg(arg_ast, mediator_arg_ast) when elem(arg_ast, 0) == :\\ do

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.11.4">
+    <title>Elixir Function Decorator – Function Decorating v0.0.1</title>
+    <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
+    <script src="dist/sidebar_items.js"></script>
+  </head>
+  <body data-type="extras">
+
+<div class="main">
+<button class="sidebar-toggle">
+  <i class="icon-menu"></i>
+</button>
+<section class="sidebar">
+  <button class="sidebar-toggle">
+    <i class="icon-menu"></i>
+  </button>
+
+  
+  <a href="api-reference.html" class="sidebar-projectLink">
+    <div class="sidebar-projectDetails">
+      <h1 class="sidebar-projectName">
+        Function Decorating
+      </h1>
+      <h2 class="sidebar-projectVersion">
+        v0.0.1
+      </h2>
+    </div>
+    
+  </a>
+
+  <div class="sidebar-search">
+    <i class="icon-search"></i>
+    <input type="text" class="sidebar-searchInput" placeholder="search" autocomplete="off" />
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+    
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+    
+
+    
+
+    
+  </ul>
+
+  <ul id="full-list" class="sidebar-fullList"></ul>
+  <div class="sidebar-noResults"></div>
+</section>
+
+<section class="content">
+  <div id="content" class="content-inner">
+
+
+<h1>Elixir Function Decorator</h1>
+<p>A function decorator macro for Elixir. Used mainly for adding log statements to the function calls.</p>
+<p>This project is based mainly on:</p>
+<ul>
+<li>The work of <a href="https://github.com/sasa1977">Saša Jurić</a>
+on the <a href="http://www.theerlangelist.com/article/macros_1">Elixir macro articles</a>. Especially the mechanism for extracting function definition metadata.
+</li>
+<li>The solution from him for <a href="https://gist.github.com/sasa1977/a14f8dd76fe437668ac1">how to override the def macro in Elixir</a>
+</li>
+<li>An addition made by <a href="https://github.com/BjRo">Björn Rochel</a> to the <a href="https://github.com/BjRo/apex/blob/master/lib/apex/awesome_def.ex">adef macro</a> considering default values for arguments. 
+</li>
+</ul>
+<h2 id="motivation"> Motivation</h2><p>All I did was use the solution provided by the mentioned above, add some minor refactoring and adjustments for my needs and package it as an helper module.</p>
+<p>This was a learning project getting into Elixir macros field.</p>
+<p>For getting into Elixir Macros, you are encourgae to read <a href="https://github.com/sasa1977">Saša Jurić</a>
+‘s excellent <a href="http://www.theerlangelist.com/article/macros_1">Elixir macro articles series</a></p>
+<h2>State</h2>
+<ul>
+<li>Currently in alpha stage.
+</li>
+<li>Not intended to be used in production. Only for experiments.
+</li>
+<li>For logging, one can use other means like trace.
+</li>
+</ul>
+<h2 id="installation"> Installation</h2><p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed as:</p>
+<ol>
+<li><p>Add function_decorating to your list of dependencies in <code class="inline">mix.exs</code>:</p>
+<pre><code class="elixir">def deps do
+  [{:function_decorating, &quot;~&gt; 0.0.1&quot;}]
+end</code></pre>
+</li>
+<li><p>Ensure function_decorating is started before your application:</p>
+<pre><code class="elixir">def application do
+  [applications: [:function_decorating]]
+end</code></pre>
+</li>
+</ol>
+<h2 id="usage"> Usage</h2><p>Decorating in dev with log decorator.</p>
+<pre><code class="elixir">defmodule User do
+  use FunctionDecorating
+  decorate_fn_with(LogDecorator)
+
+  def say(word) do
+    word
+  end
+end</code></pre>
+<pre><code class="elixir">iex&gt;User.say(&quot;hello&quot;)
+#PID&lt;0.86.0&gt; [x] Elixir.User.say([&quot;hello&quot;]) -&gt; &quot;hello&quot;
+&quot;hello&quot;</code></pre>
+<p>Default usage is for Mix.env == :dev only. To override it:</p>
+<pre><code class="elixir">defmodule User do
+  use FunctionDecorating mix_envs: [:test]
+  decorate_fn_with(LogDecorator)
+
+  def say(word) do
+    word
+  end
+end</code></pre>
+<pre><code class="elixir">iex &gt;Mix.env
+:test
+
+iex &gt;User.say(&quot;hello&quot;)
+#PID&lt;0.86.0&gt; [x] Elixir.User.say([&quot;hello&quot;]) -&gt; &quot;hello&quot;
+&quot;hello&quot;</code></pre>
+
+    <footer class="footer">
+      <p>
+        <span class="line">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.11.4),
+        </span>
+        <span class="line">
+          designed by
+          <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          </span>
+      </p>
+      <button class="night-mode-toggle" />
+    </footer>
+  </div>
+</section>
+</div>
+  <script src="dist/app-6d2e071366.js"></script>
+  </body>
+</html>
+
