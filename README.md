@@ -7,7 +7,7 @@ This project is based mainly on:
 * The work of [Saša Jurić](https://github.com/sasa1977)
 on the [Elixir macro articles](http://www.theerlangelist.com/article/macros_1). Especially the mechanism for extracting function definition metadata.
 * The solution from him for [how to override the def macro in Elixir](https://gist.github.com/sasa1977/a14f8dd76fe437668ac1)
-* An addition made by [Björn Rochel](https://github.com/BjRo) to the adef macro considering default values for arguments.
+* An addition made by [Björn Rochel](https://github.com/BjRo) to the [adef macro](https://github.com/BjRo/apex/blob/master/lib/apex/awesome_def.ex) considering default values for arguments. 
 
 ## Motivation
 
