@@ -1,15 +1,40 @@
 defmodule FnDef do
+  @moduledoc """
+
+  """
+
   defstruct [
     fn_call_ast: nil,
     fn_options_ast: nil
   ]
 
+  @doc """
+  Parse a function call into its parts: name and arguments
+  """
   def parse_fn_name_and_args({:when, _, [short_head | _]}),
     do: parse_fn_name_and_args(short_head)
 
   def parse_fn_name_and_args(short_head),
     do: Macro.decompose_call(short_head)
 
+  @doc """
+  Add meidator arguments to a function arguments list ast.
+
+  Mainly for the availabity to print unbounded arguments
+  in a function call.
+
+  say(word) -> say(word = arg0)
+  
+  Returns {[args names], [decorated args ast]}
+  ## Examples
+
+    iex> FnDef.decorate_args(quote context: __MODULE__ do [a, b, _] end)
+    {[{:arg0, [], FnDef}, {:arg1, [], FnDef}, {:arg2, [], FnDef}],
+      [{:=, [], [{:a, [], __MODULE__}, {:arg0, [], FnDef}]},
+        {:=, [], [{:b, [], __MODULE__}, {:arg1, [], FnDef}]},
+        {:=, [], [{:_, [], __MODULE__}, {:arg2, [], FnDef}]}]}
+  """
+  @spec decorate_args(list) :: {list, list}
   def decorate_args([]), do: {[],[]}
   def decorate_args(args_ast) do
    Enum.with_index(args_ast)
@@ -17,6 +42,16 @@ defmodule FnDef do
      |> Enum.unzip
   end
 
+  @doc """
+  Add mediator argument to a function argument ast.
+
+  Returns {decorated argument name, decorated argument ast}
+
+  ## Examples
+
+    iex> FnDef.decorate_arg({quote context: __MODULE__ do first_name end, 0})
+    {{:arg0, [], FnDef}, {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], FnDef}]}}
+  """
   def decorate_arg({arg_ast, index}) do
     mediator_arg_ast = Macro.var(:"arg#{index}", __MODULE__)
     full_arg = calc_full_arg(arg_ast, mediator_arg_ast)
