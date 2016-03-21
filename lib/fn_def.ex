@@ -34,6 +34,7 @@ defmodule FnDef do
       [{:=, [], [{:a, [], __MODULE__}, {:arg0, [], FnDef}]},
         {:=, [], [{:b, [], __MODULE__}, {:arg1, [], FnDef}]},
         {:=, [], [{:_, [], __MODULE__}, {:arg2, [], FnDef}]}]}
+
   ```
   """
   @spec decorate_args(list) :: {list, list}
@@ -53,6 +54,7 @@ defmodule FnDef do
   ```elixir
     iex> FnDef.decorate_arg({quote context: __MODULE__ do first_name end, 0})
     {{:arg0, [], FnDef}, {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], FnDef}]}}
+
   ```
   """
   @spec decorate_arg({Macro.t, non_neg_integer}) :: {Macro.t, Macro.t}
@@ -69,6 +71,7 @@ defmodule FnDef do
   ```elixir
     iex> FnDef.calc_full_arg(quote context: __MODULE__ do first_name end, quote context: __MODULE__ do arg0 end)
     {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], __MODULE__}]}
+
   ```
   """
   @spec calc_full_arg(Macro.t, Macro.t) :: Macro.t
