@@ -1,7 +1,7 @@
-defmodule ElixirLogflow do
+defmodule FunctionDecorating do
   @moduledoc """
   defmodule User do
-    use ElixirLogflow
+    use FunctionDecorating
 
     def say(word) do
       word
@@ -11,7 +11,7 @@ defmodule ElixirLogflow do
   # todo: no decoration is happening
 
   defmodule User do
-    use ElixirLogflow
+    use FunctionDecorating
     decorate_fn_with: LogDecorator
 
     def say(word) do
@@ -24,7 +24,7 @@ defmodule ElixirLogflow do
   # todo: result of decoration with mix.env == :prod
 
   defmodule User do
-    use ElixirLogflow, mix_envs: [:prod]
+    use FunctionDecorating, mix_envs: [:prod]
     decorate_fn_with: LogDecorator
 
     def say(word) do
@@ -35,8 +35,6 @@ defmodule ElixirLogflow do
   # todo: result of decoration with mix.env == :prod
 
   """
-
-  require FnDef
 
   @default_mix_envs [:dev]
 
@@ -58,7 +56,7 @@ defmodule ElixirLogflow do
   def generate_using_ast do
     quote do
       import Kernel, except: [def: 2]
-      import ElixirLogflow, only: [def: 2, decorate_fn_with: 1]
+      import FunctionDecorating, only: [def: 2, decorate_fn_with: 1]
       Module.register_attribute(__MODULE__, :decorators, accumulate: true)
     end
   end
@@ -92,7 +90,7 @@ defmodule ElixirLogflow do
           fn_options_ast: result_fn_options_ast
         }
       } =
-      ElixirLogflow.decorate_function_def(
+      FunctionDecorating.decorate_function_def(
         %FnDef{fn_call_ast: orig_fn_call_ast,
           fn_options_ast: orig_fn_options_ast,
         },
@@ -142,6 +140,6 @@ defmodule ElixirLogflow do
   the import statement.
   """
   defmacro def(fn_call_ast, fn_options_ast) do
-    ElixirLogflow.do_def(fn_call_ast, fn_options_ast)
+    FunctionDecorating.do_def(fn_call_ast, fn_options_ast)
   end
 end

@@ -1,4 +1,4 @@
-# ElixirLogflow
+# Elixir Function Decorator
 
 A function declaration decorator macro for Elixir. Used mainly for adding log statements to the function calls.
 
@@ -32,7 +32,7 @@ Normal usage
 
 ```elixir
 defmodule User do
-  use ElixirLogflow
+  use FunctionDecorating
 
   def say_hello do
     IO.puts "halloa!"
@@ -57,7 +57,7 @@ Disable log in a specific module:
 
 ```elixir
 defmodule User do
-  use ElixirLogflow skip_log: true
+  use FunctionDecorating skip_log: true
 
   def say_hello do
     IO.puts "halloa!"
@@ -83,7 +83,7 @@ When Mix.env == :prod
 
 ```elixir
 defmodule User do
-  use ElixirLogflow
+  use FunctionDecorating
 
   def say_hello do
     IO.puts "halloa!"
@@ -106,7 +106,7 @@ When Mix.env == :prod and user excplicitly enable log decoration
 
 ```elixir
 defmodule User do
-  use ElixirLogflow skip_log: false
+  use FunctionDecorating skip_log: false
 
   def say_hello do
     IO.puts "halloa!"
