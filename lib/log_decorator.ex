@@ -1,6 +1,5 @@
 defmodule LogDecorator do
-  require FnDef
-  @behaviour FnDefDecorator
+  @behaviour FunctionDecorator
 
   def decorate(
     %FnDef{fn_call_ast: fn_call_ast, fn_options_ast: fn_options_ast} = fn_def) do

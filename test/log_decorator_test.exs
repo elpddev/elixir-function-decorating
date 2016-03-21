@@ -1,5 +1,6 @@
 defmodule LogDecoratorTest do
   use ExUnit.Case
+
   doctest LogDecorator
 
   test "decorate - with simple params" do
