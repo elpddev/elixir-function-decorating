@@ -40,9 +40,9 @@ defmodule ElixirLogflow do
 
   @default_mix_envs [:dev]
 
-  """
-  Utility functions
-  """
+  # ******************
+  # Utility functions
+  # ******************
 
   def do_using(args_ast, current_env \\ Mix.env) do
     {mix_envs} = calc_args(args_ast)
@@ -122,9 +122,9 @@ defmodule ElixirLogflow do
     decorate_function_def(result_fn_def, rest_decorators)
   end
 
-  """
-  Inteface
-  """
+  # ******************
+  # Inteface
+  # ******************
 
   defmacro __using__(args_ast) do
     do_using(args_ast)
