@@ -5,6 +5,8 @@ defmodule FunctionDecorating.Mixfile do
     [app: :function_decorating,
      version: "0.0.1",
      elixir: "~> 1.2",
+     description: description,
+     package: package,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -28,5 +30,20 @@ defmodule FunctionDecorating.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     []
+  end
+
+  defp description do
+    """
+    A function decorator macro for Elixir.
+    Used mainly for adding log statements to the function calls.
+    """
+  end
+
+  defp package do
+    [
+      maintainers: ["Eyal Lapid"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/elpddev/elixir-function-decorating"}
+    ]
   end
 end
