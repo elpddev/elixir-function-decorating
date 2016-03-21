@@ -1,6 +1,14 @@
 # ElixirLogflow
 
-**TODO: Add description**
+A function declaration decorator macro for Elixir. Used mainly for adding log statements to the function calls.
+
+This macro is based mainly on:
+
+* The work of [Saša Jurić](https://github.com/sasa1977)
+on the [Elixir macro articles](http://www.theerlangelist.com/article/macros_1). Especially the mechanism for extracting function definition metadata.
+* The solution from him for [how to override the def macro in Elixir](https://gist.github.com/sasa1977/a14f8dd76fe437668ac1)
+
+All I did was use the two, add some minor adjustment for my needs and package it as an helper module.
 
 ## Installation
 
@@ -20,7 +28,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
 ## Usage
 
-Normal usage.
+Normal usage
 
 ```elixir
 defmodule User do
@@ -45,7 +53,7 @@ defmodule User do
 end
 ```
 
-Disable log in module.
+Disable log in a specific module:
 
 ```elixir
 defmodule User do
@@ -63,6 +71,57 @@ defmodule User do
   # ...
 
   def say_hello do
+    IO.puts "halloa!"
+  end
+end
+```
+
+The module is also configured to skip the function decoration
+when Mix.env != :dev
+
+When Mix.env == :prod
+
+```elixir
+defmodule User do
+  use ElixirLogflow
+
+  def say_hello do
+    IO.puts "halloa!"
+  end
+end
+```
+
+```elixir
+defmodule User do
+
+  # ...
+
+  def say_hello do
+    IO.puts "halloa!"
+  end
+end
+```
+
+When Mix.env == :prod and user excplicitly enable log decoration
+
+```elixir
+defmodule User do
+  use ElixirLogflow skip_log: false
+
+  def say_hello do
+    IO.puts "halloa!"
+  end
+end
+```
+
+Will result in
+
+```elixir
+defmodule User do
+  # ...
+
+  def say_hello do
+    do_log
     IO.puts "halloa!"
   end
 end
