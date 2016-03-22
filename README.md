@@ -15,7 +15,7 @@ All I did was use the solution provided by the mentioned above, add some minor r
 
 This was a learning project getting into Elixir macros field.
 
-For getting into Elixir Macros, you are encourgae to read [Saša Jurić](https://github.com/sasa1977)
+For getting into Elixir Macros, you are encouraged to read [Saša Jurić](https://github.com/sasa1977)
 's excellent [Elixir macro articles series](http://www.theerlangelist.com/article/macros_1)
 
 ## State
