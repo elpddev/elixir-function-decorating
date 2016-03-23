@@ -25,7 +25,7 @@ For getting into Elixir Macros, you are encouraged to read [Saša Jurić](https:
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+The [package](https://hex.pm/packages/function_decorating) can be installed as:
 
   1. Add function_decorating to your list of dependencies in `mix.exs`:
 
