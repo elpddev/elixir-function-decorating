@@ -2,7 +2,7 @@ defmodule LogDecorator do
   @behaviour FunctionDecorator
 
   def decorate(
-    %FnDef{fn_call_ast: fn_call_ast, fn_options_ast: fn_options_ast} = fn_def) do
+    %FnDef{fn_call_ast: fn_call_ast, fn_options_ast: fn_options_ast} = fn_def, decorate_options_ast \\ Macro.escape([])) do
 
     {fn_name_ast, fn_args_ast} = FnDef.parse_fn_name_and_args(fn_call_ast)
     {arg_names, decorated_args} = FnDef.decorate_args(fn_args_ast)
@@ -14,7 +14,7 @@ defmodule LogDecorator do
         quote do
           result = unquote(do_opt)
           LogDecorator.log_post(__ENV__, unquote(fn_name_ast),
-            unquote(arg_names), result)
+            unquote(arg_names), result, unquote(decorate_options_ast))
           result
         end
       end
@@ -26,14 +26,25 @@ defmodule LogDecorator do
     }}
   end
 
-  def log_post(env, fun_name, args_names, result) do
-    IO.puts generate_log_post_line(env, fun_name, args_names, result)
+  def log_post(env, fun_name, args_names, result, output_args) do
+    IO.puts generate_log_post_line(env, fun_name, args_names, result, output_args)
   end
 
-  def generate_log_post_line(%{module: module} = _, fun_name, args_names, result) do
+  def generate_log_post_line(
+    %{module: module} = _, fun_name, args_names, result, output_args \\ []) do
+
+    {inspect_limit, inspect_width} = calc_output_args(output_args)
+
     "#{inspect(self)} [x] #{module}.#{fun_name}" <>
-      "(#{inspect(args_names)})" <>
-      " -> #{inspect(result)}"
+      "(#{inspect(args_names, limit: inspect_limit, width: inspect_width)})" <>
+      " -> #{inspect(result, limit: inspect_limit, width: inspect_width)}"
+  end
+
+  def calc_output_args(args) do
+    inspect_limit = Keyword.get(args, :inspect_limit, 5)
+    inspect_width = Keyword.get(args, :inspect_width, 10)
+
+    {inspect_limit, inspect_width}
   end
 
   def replace_args_with_decorated_args(head, fun_name, args_ast, decorated_args) do
