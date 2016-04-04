@@ -3,22 +3,22 @@ defmodule FunctionDecoratingTest do
   doctest FunctionDecorating
 
   test "calc args - mix_envs - default" do
-    assert FunctionDecorating.calc_args(quote do nil end) == {[:dev]}
+    assert FunctionDecorating.calc_args(quote do nil end) == {[:dev], :test}
   end
 
   test "do_using - simple - mix env = dev" do
-    result_ast = FunctionDecorating.do_using(nil, :dev)
+    result_ast = FunctionDecorating.do_using(quote do [current_mix_env: :dev] end)
     assert result_ast == FunctionDecorating.generate_using_ast
   end
 
   test "do_using - simple - mix env = prod" do
-    result_ast = FunctionDecorating.do_using(nil, current_env: :prod)
-    assert result_ast == (quote do nil end)
+    result_ast = FunctionDecorating.do_using(quote do [current_mix_env: :prod] end)
+    expected_ast = FunctionDecorating.generate_bare_using_ast
+    assert result_ast == expected_ast
   end
 
   test "do_using - with 'mix_envs: [:prod]', mix env = :prod" do
-    result_ast = FunctionDecorating.do_using(quote do [mix_envs: [:prod]] end,
-      :prod)
+    result_ast = FunctionDecorating.do_using(quote do [mix_envs: [:prod], current_mix_env: :prod] end)
     assert result_ast == FunctionDecorating.generate_using_ast
   end
 
