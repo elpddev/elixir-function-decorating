@@ -48,14 +48,14 @@ defmodule FunctionDecorating do
   # Utility functions
   # ******************
 
-  def do_using(args_ast, current_env \\ Mix.env) do
-    {mix_envs} = calc_args(args_ast)
+  def do_using(args_ast) do
+    {mix_envs, current_mix_env} = calc_args(args_ast)
 
-    case Enum.find_value(mix_envs, false, fn env -> current_env == env end) do
+    case Enum.find_value(mix_envs, false, fn env -> current_mix_env == env end) do
       true ->
         generate_using_ast
       false ->
-        nil
+        generate_bare_using_ast
     end
   end
 
@@ -67,7 +67,14 @@ defmodule FunctionDecorating do
     end
   end
 
-  def calc_args(args_ast) do
+  def generate_bare_using_ast do
+    quote do
+      import FunctionDecorating, only: [decorate_fn_with: 1]
+      Module.register_attribute(__MODULE__, :decorators, accumulate: true)
+    end
+  end
+
+  def calc_args(args_ast, current_env \\ Mix.env ) do
     {args, []} = Code.eval_quoted(args_ast)
 
     args = case args do
@@ -75,10 +82,12 @@ defmodule FunctionDecorating do
       _ -> args
     end
 
+    calc_curr_mix_env = Keyword.get(args, :current_mix_env, current_env)
+    
     mix_envs = Keyword.get(args, :mix_envs,
       @default_mix_envs)
 
-    {mix_envs}
+    {mix_envs, calc_curr_mix_env}
   end
 
   def do_def(fn_call_ast, fn_options_ast) do
