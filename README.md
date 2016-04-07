@@ -30,7 +30,7 @@ The [package](https://hex.pm/packages/function_decorating) can be installed as:
   1. Add function_decorating to your list of dependencies in `mix.exs`:
 
         def deps do
-          [{:function_decorating, "~> 0.0.1"}]
+          [{:function_decorating, "~> 0.0.2"}]
         end
 
   2. Ensure function_decorating is started before your application:
