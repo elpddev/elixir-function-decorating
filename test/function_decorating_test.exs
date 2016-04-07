@@ -31,7 +31,7 @@ defmodule FunctionDecoratingTest do
         %FnDef{
           fn_call_ast: in_fn_call_ast,
           fn_options_ast: [do: in_do_block] = _in_fn_options_ast
-          } = _fn_def) do
+          } = _fn_def, decorate_options) do
 
         {:ok, %FnDef{
           fn_call_ast: in_fn_call_ast,
@@ -45,7 +45,7 @@ defmodule FunctionDecoratingTest do
 
     result = FunctionDecorating.decorate_function_def(%FnDef{
         fn_call_ast: fn_call_ast, fn_options_ast: fn_options_ast},
-        [TestModuleDecorator])
+        [{TestModuleDecorator, []}])
 
     decorating_exp = quote context: TestModuleDecorator do decorate_1 end
 

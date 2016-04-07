@@ -9,5 +9,18 @@ defmodule FunctionDecoratingIntegrationTest do
 
     assert module != nil
   end
+
+  test "" do
+    module = defmodule TestModule do
+      use FunctionDecorating, mix_envs: [:dev], current_mix_env: :dev 
+      decorate_fn_with LogDecorator, inspect_limit: 5
+
+      def test_a do
+        for n <- 1..10, into: "", do: "a"
+      end
+    end
+
+    TestModule.test_a
+  end
 end
  

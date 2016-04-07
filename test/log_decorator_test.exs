@@ -26,7 +26,8 @@ defmodule LogDecoratorTest do
         unquote(quote context: LogDecorator do __ENV__ end),
         :beep,
         [unquote(quote context: FnDef do arg0 end)],
-        unquote(result_var_ast))
+        unquote(result_var_ast), 
+        [])
       unquote(result_var_ast)
     end)]
   end
@@ -37,6 +38,15 @@ defmodule LogDecoratorTest do
 
     assert result == "#{inspect(self)} [x] Elixir.MyModule.beep([\"arg0\"]) -> \"hello\""
   end
+  
+  """ 
+  todo: check inspect width option
+  test "generate_log_post_line - with output options" do
+    result = LogDecorator.generate_log_post_line(%{module: MyModule}, "beep", ["arg0"], "hello_there_world", inspect_width: 2)
+
+    assert result == "#{inspect(self)} [x] Elixir.MyModule.beep([\"arg0\"]) -> \"hello\""
+  end
+  """
 
   test "replace_args_with_decorated_args" do
     fn_call_ast = quote do beep(word) end

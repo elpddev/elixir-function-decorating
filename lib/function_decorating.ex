@@ -62,14 +62,14 @@ defmodule FunctionDecorating do
   def generate_using_ast do
     quote do
       import Kernel, except: [def: 2]
-      import FunctionDecorating, only: [def: 2, decorate_fn_with: 1]
+      import FunctionDecorating, only: [def: 2, decorate_fn_with: 1, decorate_fn_with: 2]
       Module.register_attribute(__MODULE__, :decorators, accumulate: true)
     end
   end
 
   def generate_bare_using_ast do
     quote do
-      import FunctionDecorating, only: [decorate_fn_with: 1]
+      import FunctionDecorating, only: [decorate_fn_with: 1, decorate_fn_with: 2]
       Module.register_attribute(__MODULE__, :decorators, accumulate: true)
     end
   end
@@ -122,10 +122,10 @@ defmodule FunctionDecorating do
     {:ok, fn_def}
   end
 
-  def decorate_function_def(%FnDef{} = fn_def, [decorator | rest_decorators]) do
+  def decorate_function_def(%FnDef{} = fn_def, [{decorator, decorator_options} = decorator_def | rest_decorators]) do
     {:ok, result_fn_def} =
     fn_def
-    |> decorator.decorate
+    |> decorator.decorate decorator_options
 
     decorate_function_def(result_fn_def, rest_decorators)
   end
@@ -138,9 +138,9 @@ defmodule FunctionDecorating do
     do_using(args_ast)
   end
 
-  defmacro decorate_fn_with(decorator_ast) do
+  defmacro decorate_fn_with(decorator_ast, options_ast \\ Macro.escape([])) do
     quote do
-      @decorators unquote(decorator_ast)
+      @decorators {unquote(decorator_ast), unquote(options_ast)}
     end
   end
 
