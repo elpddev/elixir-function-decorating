@@ -43,34 +43,56 @@ defmodule LogDecorator do
   end
 
   def generate_log_pre_line(
-    %{module: module} = _, fun_name, args_names, result, output_args \\ [],
+    %{module: module} = _env, fun_name, args_names, output_args \\ [],
     current_timestamp \\ get_system_time) do
 
-    {inspect_limit, inspect_width} = calc_output_args(output_args)
+    {inspect_limit, inspect_width, arg_line_length} = 
+      calc_output_args(output_args)
 
     "#{format_timestamp(current_timestamp)}, #{inspect(self)}" <> 
     " [ ] #{module}.#{fun_name}" <>
-    "\n#{generate_args_lines(args_names, inspect_limit, inspect_width)}"
+    "\n#{generate_args_lines(args_names, inspect_limit, 
+       inspect_width, arg_line_length)}"
   end
 
   def generate_log_post_line(
     %{module: module} = _, fun_name, args_names, result, output_args \\ [], 
     current_timestamp \\ get_system_time) do
 
-    {inspect_limit, inspect_width} = calc_output_args(output_args)
+    {inspect_limit, inspect_width, arg_line_length} = 
+      calc_output_args(output_args)
 
     "#{format_timestamp(current_timestamp)}, " <>
     "#{inspect(self)} [x] #{module}.#{fun_name}" <>
-    "\n#{generate_args_lines(args_names, inspect_limit, inspect_width)}" <>
+    "\n#{generate_args_lines(args_names, inspect_limit, 
+       inspect_width, arg_line_length)}" <>
     " -> #{inspect(result, limit: inspect_limit, width: inspect_width)}"
   end
 
   @todo :test
-  def generate_args_lines(args_names, limit, width) do
+  def generate_args_lines(args_names, 
+    limit, width, arg_line_length) do
+
     result = for arg_name <- args_names, into: "" do
-      "- #{inspect(arg_name, limit: limit, width: width)}\n"
+      generate_arg_line(arg_name, limit, width, arg_line_length)
     end
     String.replace(result, ~r/(\n)$/, "")
+  end
+
+  @todo :test
+  def generate_arg_line(arg_name, limit, width, arg_line_length) do
+    inspect_line = inspect(arg_name, limit: limit, width: width, pretty: true)
+
+    result = case String.length(inspect_line) do 
+      line_length when line_length > arg_line_length ->
+        temp = inspect_line
+        |> String.slice(0, arg_line_length)
+        temp <> "\""
+      _ ->
+        inspect_line
+    end
+
+    "- #{result}\n"
   end
 
   def get_system_time(current_timestamp \\ :os.timestamp) do
@@ -86,8 +108,9 @@ defmodule LogDecorator do
   def calc_output_args(args) do
     inspect_limit = Keyword.get(args, :inspect_limit, 15)
     inspect_width = Keyword.get(args, :inspect_width, 50)
+    arg_line_length = Keyword.get(args, :arg_line_length, 80)
 
-    {inspect_limit, inspect_width}
+    {inspect_limit, inspect_width, arg_line_length}
   end
 
   def replace_args_with_decorated_args(head, fun_name, args_ast, decorated_args) do
