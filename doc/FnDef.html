@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>FnDef – Function Decorating v0.0.1</title>
+    <title>FnDef – Function Decorating v0.0.3</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Function Decorating
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.1
+        v0.0.3
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
 
 
       <h1>
-        <small class="visible-xs">Function Decorating v0.0.1</small>
+        <small class="visible-xs">Function Decorating v0.0.3</small>
         FnDef
         
         
@@ -154,7 +154,7 @@
     </a>
     <span class="signature">calc_full_arg(arg_ast, mediator_arg_ast)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L75" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L78" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -173,7 +173,8 @@
     <p>Generate AST for argument AST and its mediator.</p>
 <h2>Examples</h2>
 <pre><code class="elixir">  iex&gt; FnDef.calc_full_arg(quote context: __MODULE__ do first_name end, quote context: __MODULE__ do arg0 end)
-  {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], __MODULE__}]}</code></pre>
+  {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], __MODULE__}]}
+</code></pre>
 
   </section>
 </div>
@@ -184,7 +185,7 @@
     </a>
     <span class="signature">decorate_arg(arg)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L59" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L61" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -204,7 +205,8 @@
 <p>Returns {decorated argument name, decorated argument ast}</p>
 <h2>Examples</h2>
 <pre><code class="elixir">  iex&gt; FnDef.decorate_arg({quote context: __MODULE__ do first_name end, 0})
-  {{:arg0, [], FnDef}, {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], FnDef}]}}</code></pre>
+  {{:arg0, [], FnDef}, {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], FnDef}]}}
+</code></pre>
 
   </section>
 </div>
@@ -215,7 +217,7 @@
     </a>
     <span class="signature">decorate_args(args_ast)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L40" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L41" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -241,7 +243,8 @@ in a function call.</p>
   {[{:arg0, [], FnDef}, {:arg1, [], FnDef}, {:arg2, [], FnDef}],
     [{:=, [], [{:a, [], __MODULE__}, {:arg0, [], FnDef}]},
       {:=, [], [{:b, [], __MODULE__}, {:arg1, [], FnDef}]},
-      {:=, [], [{:_, [], __MODULE__}, {:arg2, [], FnDef}]}]}</code></pre>
+      {:=, [], [{:_, [], __MODULE__}, {:arg2, [], FnDef}]}]}
+</code></pre>
 
   </section>
 </div>
