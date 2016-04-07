@@ -20,8 +20,16 @@ defmodule LogDecoratorTest do
     end)
 
     result_var_ast = quote context: LogDecorator do result end
+
     assert result_fn_options_ast == [do: (quote do
+      LogDecorator.log_pre(
+        unquote(quote context: LogDecorator do __ENV__ end),
+        :beep,
+        [unquote(quote context: FnDef do arg0 end)],
+        [])
+
       unquote(result_var_ast) = word
+
       LogDecorator.log_post(
         unquote(quote context: LogDecorator do __ENV__ end),
         :beep,
@@ -32,11 +40,22 @@ defmodule LogDecoratorTest do
     end)]
   end
 
-  test "generate_log_post_line" do
-    result = LogDecorator.generate_log_post_line(%{module: MyModule},
-      "beep", ["arg0"], "hello")
+  test "generate_log_pre_line" do
+    current_timestamp = {{2016, 4, 7}, {5, 58, 4}}
+    expected_format_timestamp = LogDecorator.format_timestamp(current_timestamp)
+    result = LogDecorator.generate_log_pre_line(%{module: MyModule},
+      "beep", ["arg0"], "hello", [], current_timestamp)
 
-    assert result == "#{inspect(self)} [x] Elixir.MyModule.beep([\"arg0\"]) -> \"hello\""
+    assert result == "#{expected_format_timestamp}, #{inspect(self)} [ ] Elixir.MyModule.beep[\"arg0\"]"
+  end
+
+  test "generate_log_post_line" do
+    current_timestamp = {{2016, 4, 7}, {5, 58, 4}}
+    expected_format_timestamp = LogDecorator.format_timestamp(current_timestamp)
+    result = LogDecorator.generate_log_post_line(%{module: MyModule},
+      "beep", ["arg0"], "hello", [], current_timestamp)
+
+    assert result == "#{expected_format_timestamp}, #{inspect(self)} [x] Elixir.MyModule.beep([\"arg0\"]) -> \"hello\""
   end
   
   """ 
@@ -58,5 +77,16 @@ defmodule LogDecoratorTest do
 
     arg0_ast = quote context: FnDef do arg0 end
     assert result == (quote do beep(word = unquote(arg0_ast)) end)
+  end
+
+  test "get_system_time" do
+    assert LogDecorator.get_system_time({1460, 8684, 727856}) == 
+      {{2016, 4, 7}, {5, 58, 4}}
+  end
+
+  test "format_timestamp" do
+    assert LogDecorator.format_timestamp({{2016, 4, 7}, {5, 58, 4}}
+) == 
+      "2016-4-7, 5:58.4"
   end
 end
