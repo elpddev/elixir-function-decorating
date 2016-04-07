@@ -44,7 +44,7 @@ defmodule LogDecoratorTest do
     current_timestamp = {{2016, 4, 7}, {5, 58, 4}}
     expected_format_timestamp = LogDecorator.format_timestamp(current_timestamp)
     result = LogDecorator.generate_log_pre_line(%{module: MyModule},
-      "beep", ["arg0"], "hello", [], current_timestamp)
+      "beep", ["arg0"], [], current_timestamp)
 
     assert result == "#{expected_format_timestamp}, #{inspect(self)} [ ] Elixir.MyModule.beep\n- \"arg0\""
   end
@@ -91,6 +91,16 @@ defmodule LogDecoratorTest do
   end
 
   test "generate_args_lines" do
-    assert LogDecorator.generate_args_lines(["arg_val_1", "arg_val_2"], 100, 100) == "- \"arg_val_1\"\n- \"arg_val_2\"" 
+    assert LogDecorator.generate_args_lines(
+        ["arg_val_1", "arg_val_2"], 100, 100, 80) == 
+      "- \"arg_val_1\"\n- \"arg_val_2\"" 
+  end
+
+  test "generate_args_lines" do
+  end
+
+  test "generate_arg_line" do
+    assert LogDecorator.generate_arg_line("123456789", 100, 100, 5) ==
+      "- \"1234\"\n"
   end
 end
