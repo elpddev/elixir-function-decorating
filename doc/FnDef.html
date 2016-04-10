@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>FnDef – Function Decorating v0.0.5</title>
+    <title>FnDef – Function Decorating v0.0.6</title>
     <link rel="stylesheet" href="" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Function Decorating
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.5
+        v0.0.6
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
 
 
       <h1>
-        <small class="visible-xs">Function Decorating v0.0.5</small>
+        <small class="visible-xs">Function Decorating v0.0.6</small>
         FnDef
         
         
@@ -137,6 +137,12 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="#is_operator_token/1">is_operator_token(a)</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#parse_fn_name_and_args/1">parse_fn_name_and_args(short_head)</a>
   </div>
   
@@ -172,7 +178,7 @@
     </a>
     <span class="signature">calc_arg_name(arg_ast)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L155" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L166" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -194,6 +200,10 @@
    :bb</code></pre>
 <pre><code class="elixir">   iex&gt; FnDef.calc_arg_name(quote do _ = _bb \\ 6 end)
    :_bb</code></pre>
+<pre><code class="elixir">   iex&gt; FnDef.calc_arg_name(quote do {aa} = bb end)  
+   :bb</code></pre>
+<pre><code class="elixir">   iex&gt; FnDef.calc_arg_name(quote do [aa] = bb end)  
+   :bb</code></pre>
 
   </section>
 </div>
@@ -318,6 +328,23 @@ in a function call.</p>
         {:=, [], [{:_, [], __MODULE__}, {:arg2, [], FnDef}]}]}
 </code></pre>
 
+  </section>
+</div>
+<div class="detail" id="is_operator_token/1">
+  <div class="detail-header">
+    <a href="#is_operator_token/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">is_operator_token(a)</span>
+      
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L190" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    
   </section>
 </div>
 <div class="detail" id="parse_fn_name_and_args/1">
