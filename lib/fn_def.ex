@@ -151,14 +151,33 @@ defmodule FnDef do
      iex> FnDef.calc_arg_name(quote do _ = _bb \\\\ 6 end)
      :_bb
   ```
+
+  ```elixir
+     iex> FnDef.calc_arg_name(quote do {aa} = bb end)  
+     :bb
+  ```
+
+  ```elixir
+     iex> FnDef.calc_arg_name(quote do [aa] = bb end)  
+     :bb
+  ```
+
   """
   def calc_arg_name({:=, _, [{first_name, _, _}, second]} = arg_ast) do
     first_name_str = Atom.to_string(first_name)
-    case String.match?(first_name_str, ~r/^_.*/) do
-      true -> calc_arg_name(second)
-      false -> String.to_atom first_name_str
+    cond do
+      String.match?(first_name_str, ~r/^_.*/) ->
+        calc_arg_name(second)
+      is_operator_token(first_name) ->
+        calc_arg_name(second)
+      true -> 
+        String.to_atom first_name_str
     end
   end 
+
+  def calc_arg_name({:=, _, [first, second]} = _arg_ast) when is_list(first) do
+    calc_arg_name(second)
+  end
 
   def calc_arg_name({:\\, _, [first, _second]} = _arg_ast) do
     calc_arg_name(first)
@@ -166,5 +185,25 @@ defmodule FnDef do
 
   def calc_arg_name({name, _, _} = _arg_ast) do
     name
+  end
+
+  def is_operator_token(:{}) do
+    true
+  end
+
+  def is_operator_token(:%{}) do
+    true
+  end
+
+  def is_operator_token(:%) do
+    true
+  end
+
+  def is_operator_token(a) when is_list(a) do
+    true
+  end
+
+  def is_operator_token(a) do
+    false
   end
 end
