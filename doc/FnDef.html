@@ -5,8 +5,8 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>FnDef – Function Decorating v0.0.4</title>
-    <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
+    <title>FnDef – Function Decorating v0.0.5</title>
+    <link rel="stylesheet" href="" />
     <script src="dist/sidebar_items.js"></script>
   </head>
   <body data-type="modules">
@@ -27,7 +27,7 @@
         Function Decorating
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.4
+        v0.0.5
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
 
 
       <h1>
-        <small class="visible-xs">Function Decorating v0.0.4</small>
+        <small class="visible-xs">Function Decorating v0.0.5</small>
         FnDef
         
         
@@ -92,10 +92,28 @@
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
+    <a href="#calc_arg_name/1">calc_arg_name(arg_ast)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Calcuate argument name from arg expresion</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#calc_full_arg/2">calc_full_arg(arg_ast, mediator_arg_ast)</a>
   </div>
   
     <div class="summary-synopsis"><p>Generate AST for argument AST and its mediator</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#convert_to_cols/1">convert_to_cols(list)</a>
+  </div>
+  
+    <div class="summary-synopsis"><h2>Examples</h2>
 </div>
   
 </div>
@@ -147,14 +165,46 @@
             </a>
             Functions
           </h1>
-          <div class="detail" id="calc_full_arg/2">
+          <div class="detail" id="calc_arg_name/1">
+  <div class="detail-header">
+    <a href="#calc_arg_name/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">calc_arg_name(arg_ast)</span>
+      
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L155" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <p>Calcuate argument name from arg expresion. </p>
+<p>Returns the first good arg name that can be used. Not _ if possible. </p>
+<h2>Examples</h2>
+<pre><code class="elixir">   iex&gt; FnDef.calc_arg_name(quote do aa end)
+   :aa</code></pre>
+<pre><code class="elixir">   iex&gt; FnDef.calc_arg_name(quote do aa = bb end)
+   :aa</code></pre>
+<pre><code class="elixir">   iex&gt; FnDef.calc_arg_name(quote do _aa = bb end)
+   :bb</code></pre>
+<pre><code class="elixir">   iex&gt; FnDef.calc_arg_name(quote do _ = bb end)
+   :bb</code></pre>
+<pre><code class="elixir">   iex&gt; FnDef.calc_arg_name(quote do _ = bb \\ 6 end) 
+   :bb</code></pre>
+<pre><code class="elixir">   iex&gt; FnDef.calc_arg_name(quote do _ = _bb \\ 6 end)
+   :_bb</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="calc_full_arg/2">
   <div class="detail-header">
     <a href="#calc_full_arg/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">calc_full_arg(arg_ast, mediator_arg_ast)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L78" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L106" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -178,6 +228,27 @@
 
   </section>
 </div>
+<div class="detail" id="convert_to_cols/1">
+  <div class="detail-header">
+    <a href="#convert_to_cols/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">convert_to_cols(list)</span>
+      
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L58" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <h2>Examples</h2>
+<pre><code class="elixir">  iex&gt; FnDef.convert_to_cols([{:first_name, {:arg0, [], FnDef}, {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], FnDef}]}}, {:last_name, {:arg1, [], FnDef}, {:=, [], [{:last_name, [], __MODULE__}, {:arg1, [], FnDef}]}}])
+  {[:first_name, :last_name], [{:arg0, [], FnDef}, {:arg1, [], FnDef}], [{:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], FnDef}]}, {:=, [], [{:last_name, [], __MODULE__}, {:arg1, [], FnDef}]}]}
+</code></pre>
+
+  </section>
+</div>
 <div class="detail" id="decorate_arg/1">
   <div class="detail-header">
     <a href="#decorate_arg/1" class="detail-link" title="Link to this function">
@@ -185,7 +256,7 @@
     </a>
     <span class="signature">decorate_arg(arg)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L61" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L88" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -205,7 +276,7 @@
 <p>Returns {decorated argument name, decorated argument ast}</p>
 <h2>Examples</h2>
 <pre><code class="elixir">  iex&gt; FnDef.decorate_arg({quote context: __MODULE__ do first_name end, 0})
-  {{:arg0, [], FnDef}, {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], FnDef}]}}
+  {:first_name, {:arg0, [], FnDef}, {:=, [], [{:first_name, [], __MODULE__}, {:arg0, [], FnDef}]}}
 </code></pre>
 
   </section>
@@ -217,7 +288,7 @@
     </a>
     <span class="signature">decorate_args(args_ast)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L41" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/fn_def.ex#L42" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -227,7 +298,7 @@
       <h4 class="specs-title">Specs</h4>
       <div class="specs-list">
         
-          <pre><code class="elixir">decorate_args(list) :: {list, list}</code></pre>
+          <pre><code class="elixir">decorate_args(list) :: {list, list, list}</code></pre>
         
       </div>
     </div>
@@ -240,10 +311,11 @@ in a function call.</p>
 <p>Returns {[args names], [decorated args ast]}</p>
 <h2>Examples</h2>
 <pre><code class="elixir">  iex&gt; FnDef.decorate_args(quote context: __MODULE__ do [a, b, _] end)
-  {[{:arg0, [], FnDef}, {:arg1, [], FnDef}, {:arg2, [], FnDef}],
-    [{:=, [], [{:a, [], __MODULE__}, {:arg0, [], FnDef}]},
-      {:=, [], [{:b, [], __MODULE__}, {:arg1, [], FnDef}]},
-      {:=, [], [{:_, [], __MODULE__}, {:arg2, [], FnDef}]}]}
+  {[:a, :b, :arg2],
+    [{:arg0, [], FnDef}, {:arg1, [], FnDef}, {:arg2, [], FnDef}],
+      [{:=, [], [{:a, [], __MODULE__}, {:arg0, [], FnDef}]},
+        {:=, [], [{:b, [], __MODULE__}, {:arg1, [], FnDef}]},
+        {:=, [], [{:_, [], __MODULE__}, {:arg2, [], FnDef}]}]}
 </code></pre>
 
   </section>
@@ -289,7 +361,7 @@ in a function call.</p>
   </div>
 </section>
 </div>
-  <script src="dist/app-6d2e071366.js"></script>
+  <script src=""></script>
   </body>
 </html>
 

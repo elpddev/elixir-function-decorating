@@ -5,8 +5,8 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>LogDecorator – Function Decorating v0.0.4</title>
-    <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
+    <title>LogDecorator – Function Decorating v0.0.5</title>
+    <link rel="stylesheet" href="" />
     <script src="dist/sidebar_items.js"></script>
   </head>
   <body data-type="modules">
@@ -27,7 +27,7 @@
         Function Decorating
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.4
+        v0.0.5
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
 
 
       <h1>
-        <small class="visible-xs">Function Decorating v0.0.4</small>
+        <small class="visible-xs">Function Decorating v0.0.5</small>
         LogDecorator
         
         
@@ -106,25 +106,25 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#generate_arg_line/4">generate_arg_line(arg_name, limit, width, arg_line_length)</a>
+    <a href="#generate_arg_line/5">generate_arg_line(arg_calc_name, arg_value, limit, width, arg_line_length)</a>
   </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#generate_args_lines/4">generate_args_lines(args_names, limit, width, arg_line_length)</a>
+    <a href="#generate_args_lines/5">generate_args_lines(args_values, args_calc_names, limit, width, arg_line_length)</a>
   </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#generate_log_post_line/6">generate_log_post_line(, fun_name, args_names, result, output_args \\ [], current_timestamp \\ get_system_time)</a>
+    <a href="#generate_log_post_line/7">generate_log_post_line(, fun_name, arg_calc_names, args_values, result, output_args \\ [], current_timestamp \\ get_system_time)</a>
   </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#generate_log_pre_line/5">generate_log_pre_line(env, fun_name, args_names, output_args \\ [], current_timestamp \\ get_system_time)</a>
+    <a href="#generate_log_pre_line/6">generate_log_pre_line(env, fun_name, arg_calc_names, args_values, output_args \\ [], current_timestamp \\ get_system_time)</a>
   </div>
   
 </div>
@@ -136,13 +136,13 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#log_post/5">log_post(env, fun_name, args_names, result, output_args)</a>
+    <a href="#log_post/6">log_post(env, fun_name, arg_calc_names, args_values, result, output_args)</a>
   </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#log_pre/4">log_pre(env, fun_name, args_names, output_args)</a>
+    <a href="#log_pre/5">log_pre(env, fun_name, arg_calc_names, args_values, output_args)</a>
   </div>
   
 </div>
@@ -180,7 +180,7 @@
     </a>
     <span class="signature">calc_output_args(args)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L108" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L124" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -214,7 +214,7 @@
     </a>
     <span class="signature">format_timestamp(timestamp)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L102" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L118" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -224,14 +224,14 @@
     
   </section>
 </div>
-<div class="detail" id="generate_arg_line/4">
+<div class="detail" id="generate_arg_line/5">
   <div class="detail-header">
-    <a href="#generate_arg_line/4" class="detail-link" title="Link to this function">
+    <a href="#generate_arg_line/5" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">generate_arg_line(arg_name, limit, width, arg_line_length)</span>
+    <span class="signature">generate_arg_line(arg_calc_name, arg_value, limit, width, arg_line_length)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L83" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L97" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -241,14 +241,14 @@
     
   </section>
 </div>
-<div class="detail" id="generate_args_lines/4">
+<div class="detail" id="generate_args_lines/5">
   <div class="detail-header">
-    <a href="#generate_args_lines/4" class="detail-link" title="Link to this function">
+    <a href="#generate_args_lines/5" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">generate_args_lines(args_names, limit, width, arg_line_length)</span>
+    <span class="signature">generate_args_lines(args_values, args_calc_names, limit, width, arg_line_length)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L73" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L84" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -258,14 +258,14 @@
     
   </section>
 </div>
-<div class="detail" id="generate_log_post_line/6">
+<div class="detail" id="generate_log_post_line/7">
   <div class="detail-header">
-    <a href="#generate_log_post_line/6" class="detail-link" title="Link to this function">
+    <a href="#generate_log_post_line/7" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">generate_log_post_line(, fun_name, args_names, result, output_args \\ [], current_timestamp \\ get_system_time)</span>
+    <span class="signature">generate_log_post_line(, fun_name, arg_calc_names, args_values, result, output_args \\ [], current_timestamp \\ get_system_time)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L58" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L65" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -275,14 +275,14 @@
     
   </section>
 </div>
-<div class="detail" id="generate_log_pre_line/5">
+<div class="detail" id="generate_log_pre_line/6">
   <div class="detail-header">
-    <a href="#generate_log_pre_line/5" class="detail-link" title="Link to this function">
+    <a href="#generate_log_pre_line/6" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">generate_log_pre_line(env, fun_name, args_names, output_args \\ [], current_timestamp \\ get_system_time)</span>
+    <span class="signature">generate_log_pre_line(env, fun_name, arg_calc_names, args_values, output_args \\ [], current_timestamp \\ get_system_time)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L45" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L46" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -299,7 +299,7 @@
     </a>
     <span class="signature">get_system_time(current_timestamp \\ :os.timestamp())</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L98" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L114" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -309,14 +309,14 @@
     
   </section>
 </div>
-<div class="detail" id="log_post/5">
+<div class="detail" id="log_post/6">
   <div class="detail-header">
-    <a href="#log_post/5" class="detail-link" title="Link to this function">
+    <a href="#log_post/6" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">log_post(env, fun_name, args_names, result, output_args)</span>
+    <span class="signature">log_post(env, fun_name, arg_calc_names, args_values, result, output_args)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L38" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L39" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -326,12 +326,12 @@
     
   </section>
 </div>
-<div class="detail" id="log_pre/4">
+<div class="detail" id="log_pre/5">
   <div class="detail-header">
-    <a href="#log_pre/4" class="detail-link" title="Link to this function">
+    <a href="#log_pre/5" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">log_pre(env, fun_name, args_names, output_args)</span>
+    <span class="signature">log_pre(env, fun_name, arg_calc_names, args_values, output_args)</span>
       
       <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L34" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
@@ -350,7 +350,7 @@
     </a>
     <span class="signature">replace_args_with_decorated_args(head, fun_name, args_ast, decorated_args)</span>
       
-      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L116" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/elpddev/elixir-function-decorating/blob/master/lib/log_decorator.ex#L132" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -383,7 +383,7 @@
   </div>
 </section>
 </div>
-  <script src="dist/app-6d2e071366.js"></script>
+  <script src=""></script>
   </body>
 </html>
 
