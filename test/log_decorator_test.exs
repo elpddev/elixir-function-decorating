@@ -25,6 +25,7 @@ defmodule LogDecoratorTest do
       LogDecorator.log_pre(
         unquote(quote context: LogDecorator do __ENV__ end),
         :beep,
+        [unquote(quote context: FnDef do :word end)],
         [unquote(quote context: FnDef do arg0 end)],
         [])
 
@@ -33,6 +34,7 @@ defmodule LogDecoratorTest do
       LogDecorator.log_post(
         unquote(quote context: LogDecorator do __ENV__ end),
         :beep,
+        [unquote(quote context: FnDef do :word end)],
         [unquote(quote context: FnDef do arg0 end)],
         unquote(result_var_ast), 
         [])
@@ -44,18 +46,18 @@ defmodule LogDecoratorTest do
     current_timestamp = {{2016, 4, 7}, {5, 58, 4}}
     expected_format_timestamp = LogDecorator.format_timestamp(current_timestamp)
     result = LogDecorator.generate_log_pre_line(%{module: MyModule},
-      "beep", ["arg0"], [], current_timestamp)
+      "beep", [:first_name], ["arg0"], [], current_timestamp)
 
-    assert result == "#{expected_format_timestamp}, #{inspect(self)} [ ] Elixir.MyModule.beep\n- \"arg0\""
+    assert result == "#{expected_format_timestamp}, #{inspect(self)} [ ] Elixir.MyModule.beep\n- first_name: \"arg0\""
   end
 
   test "generate_log_post_line" do
     current_timestamp = {{2016, 4, 7}, {5, 58, 4}}
     expected_format_timestamp = LogDecorator.format_timestamp(current_timestamp)
     result = LogDecorator.generate_log_post_line(%{module: MyModule},
-      "beep", ["arg0"], "hello", [], current_timestamp)
+      "beep", [:word], ["arg0"], "hello", [], current_timestamp)
 
-    assert result == "#{expected_format_timestamp}, #{inspect(self)} [x] Elixir.MyModule.beep\n- \"arg0\" -> \"hello\""
+    assert result == "#{expected_format_timestamp}, #{inspect(self)} [x] Elixir.MyModule.beep\n- word: \"arg0\" -> \"hello\""
   end
   
   """ 
@@ -70,7 +72,7 @@ defmodule LogDecoratorTest do
   test "replace_args_with_decorated_args" do
     fn_call_ast = quote do beep(word) end
     {fn_name_ast, fn_args_ast} = FnDef.parse_fn_name_and_args(fn_call_ast)
-    {_arg_names, decorated_args} = FnDef.decorate_args(fn_args_ast)
+    {_args_calc_names, _arg_names, decorated_args} = FnDef.decorate_args(fn_args_ast)
 
     result = LogDecorator.replace_args_with_decorated_args(
       fn_call_ast, fn_name_ast, fn_args_ast, decorated_args)
@@ -92,15 +94,15 @@ defmodule LogDecoratorTest do
 
   test "generate_args_lines" do
     assert LogDecorator.generate_args_lines(
-        ["arg_val_1", "arg_val_2"], 100, 100, 80) == 
-      "- \"arg_val_1\"\n- \"arg_val_2\"" 
+        ["arg_val_1", "arg_val_2"], [:arg1, :arg2], 100, 100, 80) == 
+      "- arg1: \"arg_val_1\"\n- arg2: \"arg_val_2\"" 
   end
 
   test "generate_args_lines" do
   end
 
   test "generate_arg_line" do
-    assert LogDecorator.generate_arg_line("123456789", 100, 100, 5) ==
-      "- \"1234\"\n"
+    assert LogDecorator.generate_arg_line(:number, "123456789", 100, 100, 5) ==
+      "- number: \"1234\"\n"
   end
 end
