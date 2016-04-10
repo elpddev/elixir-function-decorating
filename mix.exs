@@ -3,7 +3,7 @@ defmodule FunctionDecorating.Mixfile do
 
   def project do
     [app: :function_decorating,
-     version: "0.0.4",
+     version: "0.0.5",
      name: "Function Decorating", 
      source_url: "https://github.com/elpddev/elixir-function-decorating",
      homepage_url: "https://github.com/elpddev/elixir-function-decorating",
