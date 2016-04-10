@@ -122,10 +122,10 @@ defmodule FunctionDecorating do
     {:ok, fn_def}
   end
 
-  def decorate_function_def(%FnDef{} = fn_def, [{decorator, decorator_options} = decorator_def | rest_decorators]) do
+  def decorate_function_def(%FnDef{} = fn_def, [{decorator, decorator_options} = _decorator_def | rest_decorators]) do
     {:ok, result_fn_def} =
     fn_def
-    |> decorator.decorate decorator_options
+    |> decorator.decorate(decorator_options)
 
     decorate_function_def(result_fn_def, rest_decorators)
   end

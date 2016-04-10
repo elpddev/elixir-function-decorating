@@ -18,6 +18,10 @@ defmodule FunctionDecoratingIntegrationTest do
       def test_a do
         for n <- 1..10, into: "", do: "a"
       end
+
+      def test_b(first_var) do
+        first_var
+      end
     end
 
     TestModule.test_a

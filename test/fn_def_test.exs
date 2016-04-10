@@ -35,9 +35,10 @@ defmodule FnDefTest do
       unquote(var_exp) = arg2
     end
 
-    {result_arg_name, result_full_arg} =
+    {result_arg_calc_name, result_arg_name, result_full_arg} =
       FnDef.decorate_arg({quote(do: first_name), 2})
 
+    assert result_arg_calc_name == :first_name
     assert result_arg_name == (quote context: FnDef do arg2 end)
     assert result_full_arg == expected_result
   end
@@ -48,9 +49,10 @@ defmodule FnDefTest do
       unquote(var_exp) = arg3
     end
 
-    {result_arg_name, result_full_arg} =
+    {result_arg_calc_name, result_arg_name, result_full_arg} =
       FnDef.decorate_arg({quote(do: _), 3})
 
+    assert result_arg_calc_name == :arg3
     assert result_arg_name == (quote context: FnDef do arg3 end)
     assert result_full_arg == expected_result
   end
@@ -61,9 +63,10 @@ defmodule FnDefTest do
       first_name = unquote(mediator_var_exp) \\ "john"
     end
 
-    {result_arg_name, result_full_arg} =
+    {result_arg_calc_name, result_arg_name, result_full_arg} =
       FnDef.decorate_arg({quote(do: first_name \\ "john"), 0})
 
+    assert result_arg_calc_name == :first_name
     assert result_arg_name == (quote context: FnDef do arg0 end)
     assert result_full_arg == expected_result
   end
